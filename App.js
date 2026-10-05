@@ -1,10 +1,52 @@
+import { useState } from 'react';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
+  const [likes, setLikes] = useState(0);
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <View style={styles.card}>
+        <Image source={require('./assets/icon.png')} style={styles.avatar} />
+        <Text style={styles.name}>Tenzin Namgyal Tshering</Text>
+        <Text style={styles.subtitle}>BE Information and Technology · CST</Text>
+        <Text style={styles.bio}>You only live once.....live your life to the fullest</Text>
+
+        <View style={styles.likesRow}>
+          <Ionicons name="heart" size={22} color="#d64545" />
+          <Text style={styles.likesText}>{likes} likes</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Pressable
+            style={({ pressed }) => [styles.button, pressed && { opacity: 0.6 }]}
+            onPress={() => setLikes(likes + 1)}
+          >
+            <Ionicons name="arrow-up" size={22} color="#fff" />
+            <Text style={styles.buttonLabel}>Upvote</Text>
+          </Pressable>
+
+          <Pressable
+            style={({ pressed }) => [styles.button, pressed && { opacity: 0.6 }]}
+            onPress={() => setLikes(Math.max(0, likes - 1))}
+          >
+            <Ionicons name="arrow-down" size={22} color="#fff" />
+            <Text style={styles.buttonLabel}>Downvote</Text>
+          </Pressable>
+
+          <Pressable
+            style={({ pressed }) => [styles.button, styles.resetButton, pressed && { opacity: 0.6 }]}
+            onPress={() => setLikes(0)}
+          >
+            <Ionicons name="refresh" size={22} color="#fff" />
+            <Text style={styles.buttonLabel}>Reset</Text>
+          </Pressable>
+        </View>
+
+        {likes >= 10 && <Text style={styles.popular}>You're popular!</Text>}
+      </View>
       <StatusBar style="auto" />
     </View>
   );
@@ -13,8 +55,40 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#eef2f7',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 20,
   },
+  card: {
+    width: '100%',
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 24,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 4, // the shadow on Android
+  },
+  avatar: { width: 96, height: 96, borderRadius: 48, marginBottom: 12 },
+  name: { fontSize: 24, fontWeight: 'bold' },
+  subtitle: { fontSize: 14, color: '#666', marginTop: 4 },
+  bio: { fontSize: 15, textAlign: 'center', marginTop: 12, lineHeight: 22 },
+
+  likesRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 20 },
+  likesText: { fontSize: 18 },
+  row: { flexDirection: 'row', gap: 12, marginTop: 12 },
+  button: {
+    backgroundColor: '#2f6fed',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    alignItems: 'center', // centres the icon above its label
+    minWidth: 84,
+  },
+  buttonLabel: { color: '#fff', fontSize: 12, fontWeight: '600', marginTop: 2 },
+
+  resetButton: { backgroundColor: '#e5484d' },
+  popular: { marginTop: 12, fontSize: 16, fontWeight: '600' },
 });
